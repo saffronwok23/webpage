@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saffron Wok - Persian-Asian Fusion Catering</title>
+    
+    <!-- Chosen Palette: Ember & Slate -->
+    <!-- Application Structure Plan: The application follows a narrative, single-page scrolling structure. It begins with an immersive loader (video animation) and hero (fire) to establish the brand atmosphere. The user is then guided sequentially through the restaurant's story, a detailed interactive menu, a visual gallery, a clear call-to-action for ordering/catering, and finally, contact information. This linear flow is intuitive and logically builds desire before presenting the conversion point. -->
+    <!-- Visualization & Content Choices: 
+        - On-Load Animation: Goal: Create an immersive entry. Method: A full-screen video animation that plays once, then triggers a wipe-up transition to reveal the main page. Interaction: The loader automatically disappears after the video completes. Justification: This provides a high-impact, custom-branded entry experience.
+        - Background Animation: Goal: Maintain a constant, atmospheric brand element. Method: A JavaScript-powered HTML Canvas animation rendering rising ember particles. Interaction: This is a passive, ambient background animation. Justification: Using Canvas for the fire effect is vastly more performant than a background video, critical for site speed and user experience, while still achieving the desired "fire" theme.
+        - Menu: Goal: Clearly present offerings and encourage exploration. Method: A responsive Tailwind CSS grid. Interaction: JavaScript-powered filter buttons allow users to sort the menu by category. Justification: An HTML menu is SEO-friendly and accessible. The filtering interaction makes a large menu easy to navigate.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. 
+    -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #121212;
+            color: #E0E0E0;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+        h1, h2, h3, h4, .font-cinzel {
+            font-family: 'Cinzel', serif;
+        }
+        .text-glow {
+            text-shadow: 0 0 8px rgba(255, 165, 0, 0.6), 0 0 10px rgba(255, 165, 0, 0.4);
+        }
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #FFA500;
+            transition: width 0.3s ease;
+        }
+        .nav-link.active, .nav-link:hover {
+            color: #FFA500;
+        }
+        .nav-link.active::after, .nav-link:hover::after {
+            width: 100%;
+        }
+        .menu-item {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+        }
+        .btn-primary {
+            background-color: #FFA500;
+            color: #121212;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        .btn-primary:hover {
+            background-color: #E0E0E0;
+            color: #121212;
+            transform: scale(1.05);
+        }
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #121212;
+            transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+        #loader.hidden {
+            transform: translateY(-100%);
+        }
+        #loader-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        #fire-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.7; /* Increased visibility */
+        }
+        .gallery-image-wrapper {
+            position: absolute;
+            transition: transform 0.3s ease;
+        }
+        .gallery-image-wrapper:hover {
+            transform: scale(1.05) !important; /* Use important to override JS transform for hover effect */
+            z-index: 10;
+        }
+        .hero-logo {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .hero-logo.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div id="loader">
+        <video id="loader-video" src="./intro.mp4" autoplay muted playsinline></video>
+    </div>
+
+    <header id="main-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-transparent py-4">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <a href="#" class="text-3xl font-bold font-cinzel">SaffronWok</a>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#story" class="nav-link">Our Story</a>
+                <a href="#menu" class="nav-link">Menu</a>
+                <a href="#gallery" class="nav-link">Gallery</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </nav>
+            <a href="#order" class="hidden md:inline-block px-6 py-2 rounded-md btn-primary">Catering</a>
+            <button id="mobile-menu-btn" class="md:hidden text-2xl">☰</button>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-black bg-opacity-90 mt-4">
+            <a href="#story" class="block text-center py-3 px-6 nav-link">Our Story</a>
+            <a href="#menu" class="block text-center py-3 px-6 nav-link">Menu</a>
+            <a href="#gallery" class="block text-center py-3 px-6 nav-link">Gallery</a>
+            <a href="#contact" class="block text-center py-3 px-6 nav-link">Contact</a>
+            <a href="#order" class="block text-center py-4 px-6 btn-primary mx-4 my-4 rounded-md">Catering</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="hero" class="relative h-screen flex items-center justify-center text-center overflow-hidden">
+            <canvas id="fire-canvas"></canvas>
+            <div class="absolute inset-0 bg-black opacity-60"></div>
+            <div class="relative z-10 px-4">
+                <img id="hero-logo" src="./Logo.png" alt="Saffron Wok Logo" class="hero-logo max-w-sm sm:max-w-md md:max-w-lg mx-auto">
+            </div>
+        </section>
+
+        <section id="story" class="py-20 md:py-32 bg-[#1a1a1a]">
+            <div class="container mx-auto px-6">
+                <div class="max-w-4xl mx-auto text-center">
+                    <h2 class="text-4xl md:text-5xl font-cinzel mb-6">A Fusion of Flavor & Fire</h2>
+                    <p class="text-lg text-gray-400 leading-relaxed">
+                        Established in 2023, Saffron Wok was born from a passion for flavor and a mastery of fire. We blend the aromatic elegance of traditional spices with the bold, savory character of Asian wok cooking and grilling. Our specialty is catering, bringing an unforgettable culinary experience to your special events. Each dish is a testament to our commitment to quality, innovation, and the art of fusion cuisine. From intimate gatherings to large celebrations, we provide expert catering for any occasion.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="menu" class="py-20 md:py-32">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl md:text-5xl font-cinzel text-center mb-12">Our Menu</h2>
+                <div id="menu-filters" class="flex justify-center flex-wrap gap-2 md:space-x-4 mb-12">
+                    <button class="menu-filter-btn active" data-filter="all">All</button>
+                    <button class="menu-filter-btn" data-filter="appetizer">Appetizers</button>
+                    <button class="menu-filter-btn" data-filter="plates">Plates</button>
+                </div>
+
+                <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                </div>
+            </div>
+        </section>
+
+
+        <section id="gallery" class="py-20 md:py-32 bg-[#1a1a1a]">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl md:text-5xl font-cinzel mb-12">A Visual Feast</h2>
+            </div>
+            <!-- Desktop Gallery: Floating Circles -->
+            <div id="gallery-container" class="relative w-full h-[70vh] max-h-[600px] border-y border-gray-800 overflow-hidden bg-black/20 hidden md:block">
+                <!-- Desktop gallery images will be populated here by JavaScript -->
+            </div>
+            <!-- Mobile Gallery: Carousel -->
+            <div id="mobile-gallery" class="md:hidden relative w-full overflow-hidden rounded-lg border border-gray-800">
+                <div id="mobile-gallery-track" class="flex transition-transform duration-500 ease-in-out">
+                    <!-- Mobile gallery images will be populated here by JavaScript -->
+                </div>
+                <button id="prev-btn" class="absolute top-1/2 left-2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full">&lt;</button>
+                <button id="next-btn" class="absolute top-1/2 right-2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full">&gt;</button>
+            </div>
+        </section>
+
+        <section id="order" class="py-20 md:py-32 text-center">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl md:text-5xl font-cinzel mb-6">Expert Catering For Your Next Event</h2>
+                <p class="max-w-2xl mx-auto text-lg text-gray-400 mb-8">
+                    Let us bring the fire to you. Contact us to discuss your catering needs and we'll craft a memorable menu for your special occasion.
+                </p>
+                <a href="tel:404-740-9201" class="inline-block px-12 py-4 rounded-md btn-primary text-xl">Call Catering: (404) 740-9201</a>
+            </div>
+        </section>
+
+        <footer id="contact" class="py-16 bg-black">
+            <div class="container mx-auto px-6 text-center text-gray-400">
+                <h3 class="text-3xl font-cinzel mb-4">Saffron Wok</h3>
+                <p class="mb-8">Est. 2023</p>
+                <div class="flex flex-col md:flex-row justify-center md:space-x-12 space-y-4 md:space-y-0 mb-8">
+                    <p>Duluth, GA 30096</p>
+                    <p>Main: (470) 893-3450</p>
+                    <p>Catering: (404) 740-9201</p>
+                </div>
+                <div class="mb-8">
+                    <p class="font-bold">Hours</p>
+                    <p>Available for Catering Events</p>
+                    <p>Contact us to book</p>
+                </div>
+                <p class="text-sm">&copy; 2025 Saffron Wok. All Rights Reserved.</p>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Loader Animation
+            const loader = document.getElementById('loader');
+            const loaderVideo = document.getElementById('loader-video');
+            const heroLogo = document.getElementById('hero-logo');
+
+            function hideLoader() {
+                loader.classList.add('hidden');
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    heroLogo.classList.add('visible');
+                }, 1000); 
+            }
+
+            // Check if the video can play
+            const playPromise = loaderVideo.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    // Autoplay started
+                    loaderVideo.addEventListener('ended', hideLoader);
+                }).catch(error => {
+                    // Autoplay was prevented. Hide loader immediately.
+                    hideLoader();
+                });
+            } else {
+                 hideLoader();
+            }
+
+            setTimeout(hideLoader, 7000);
+
+            // Fire Canvas Animation
+            const canvas = document.getElementById('fire-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = canvas.height + Math.random() * 100;
+                    this.vx = (Math.random() - 0.5) * 0.6;
+                    this.vy = -Math.random() * 2.5 - 1.5;
+                    this.size = Math.random() * 3 + 1.5; // Larger particles
+                    this.life = Math.random() * 100 + 50;
+                    // Brighter, more orange/red colors with higher opacity
+                    this.color = `rgba(255, ${Math.random() * 100 + 80}, 0, ${Math.random() * 0.4 + 0.5})`;
+                }
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    this.life--;
+                }
+                draw() {
+                    ctx.beginPath();
+                    // Add a glow effect
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = 'rgba(255, 100, 0, 0.7)';
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.fill();
+                    // Reset shadow
+                    ctx.shadowBlur = 0;
+                }
+            }
+
+            function animateFire() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                if (particles.length < 150) { // Increased particle count
+                    for (let i = 0; i < 5; i++) {
+                        particles.push(new Particle());
+                    }
+                }
+                particles.forEach((p, i) => {
+                    p.update();
+                    p.draw();
+                    if (p.life < 0 || p.y < 0) {
+                        particles.splice(i, 1);
+                    }
+                });
+                requestAnimationFrame(animateFire);
+            }
+            animateFire();
+
+            // Header Scroll Effect
+            const header = document.getElementById('main-header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('bg-black', 'bg-opacity-80', 'shadow-lg');
+                    header.classList.remove('bg-transparent');
+                } else {
+                    header.classList.remove('bg-black', 'bg-opacity-80', 'shadow-lg');
+                    header.classList.add('bg-transparent');
+                }
+            });
+
+            // Mobile Menu
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+            });
+
+            // Smooth Scrolling & Active Nav Link
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('main section');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', e => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href');
+                    document.querySelector(targetId).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 60) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+            
+            // Menu Data & Filtering
+            const menuData = [
+                { name: 'Corn Stir Fried', vietnameseName: 'Bắp Xào', category: 'appetizer', sizeClasses: "w-40 h-40 md:w-48 md:h-48" },
+                { name: 'Grill Chicken Feet Satay', vietnameseName: 'Chân Gà Nướng Satay', category: 'appetizer', sizeClasses: "w-36 h-36 md:w-40 md:h-40"},
+                { name: 'Grill Chicken Wings Satay', vietnameseName: 'Cánh Gà Nướng Satay', category: 'appetizer', sizeClasses: "w-24 h-24 md:w-32 md:h-32"},
+                { name: 'BBQ House Special Pork Skewer', vietnameseName: 'Thịt Xiên Đặc Biệt', category: 'appetizer', sizeClasses: "w-32 h-32 md:w-44 md:h-44"},
+                { name: 'BBQ House Special Beef Skewer', vietnameseName: 'Bò Xiên Đặc Biệt', category: 'appetizer', sizeClasses: "w-40 h-40 md:w-52 md:h-52"},
+                { name: 'Grill Bread + BBQ House Special Pork Skewers', vietnameseName: 'Bánh Mì Nướng + Thịt Xiên Đặc Biệt', category: 'plates', sizeClasses: "w-28 h-28 md:w-36 md:h-36"},
+                { name: 'Grill Bread + BBQ House Special Beef Skewer', vietnameseName: 'Bánh Mì Nướng + Bò Xiên Đặc Biệt', category: 'plates', sizeClasses: "w-36 h-36 md:w-48 md:h-48"},
+                { name: 'Grill Bread + BBQ House Special Half Chicken', vietnameseName: '1 Bánh Mì Nướng + ½ Con Gà Nướng Đặc Biệt', category: 'plates', sizeClasses: "w-32 h-32 md:w-40 md:h-40"},
+            ];
+
+            const menuGrid = document.getElementById('menu-grid');
+            const filterBtns = document.querySelectorAll('.menu-filter-btn');
+
+            const displayMenu = (filter) => {
+                menuGrid.innerHTML = '';
+                const filteredData = (filter === 'all') ? menuData : menuData.filter(item => item.category === filter);
+                
+                filteredData.forEach(item => {
+                    const menuItemEl = document.createElement('div');
+                    menuItemEl.className = 'menu-item bg-[#1a1a1a] rounded-lg overflow-hidden border border-gray-700 flex flex-col';
+                    menuItemEl.innerHTML = `
+                        <img src="./Menu/${item.name}.jpg" alt="${item.name}" class="w-full h-48 object-cover">
+                        <div class="p-6 flex-grow flex flex-col">
+                            <h3 class="text-xl font-bold font-cinzel mb-2 flex-grow">${item.name}</h3>
+                            <p class="text-gray-400 text-sm">${item.vietnameseName}</p>
+                        </div>
+                    `;
+                    menuGrid.appendChild(menuItemEl);
+                });
+            };
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    displayMenu(btn.dataset.filter);
+                });
+            });
+            
+            displayMenu('all');
+
+            const style = document.createElement('style');
+            style.innerHTML = `
+                .menu-filter-btn {
+                    padding: 8px 20px;
+                    border: 1px solid #4a4a4a;
+                    border-radius: 9999px;
+                    transition: all 0.3s ease;
+                    cursor: pointer;
+                    white-space: nowrap;
+                }
+                .menu-filter-btn:hover {
+                    background-color: #FFA500;
+                    border-color: #FFA500;
+                    color: #121212;
+                }
+                .menu-filter-btn.active {
+                    background-color: #FFA500;
+                    border-color: #FFA500;
+                    color: #121212;
+                    font-weight: 600;
+                }
+            `;
+            document.head.appendChild(style);
+
+            const galleryContainer = document.getElementById('gallery-container');
+            const mobileGalleryTrack = document.getElementById('mobile-gallery-track');
+
+            menuData.forEach(item => {
+                // Populate Desktop Gallery
+                const desktopWrapper = document.createElement('div');
+                desktopWrapper.className = `gallery-image-wrapper ${item.sizeClasses}`;
+                desktopWrapper.innerHTML = `<img class="w-full h-full rounded-full object-cover border-4 border-gray-700 shadow-lg" src="./Menu/${item.name}.jpg" alt="${item.alt}">`;
+                galleryContainer.appendChild(desktopWrapper);
+
+                // Populate Mobile Gallery
+                const mobileWrapper = document.createElement('div');
+                mobileWrapper.className = 'w-full flex-shrink-0';
+                mobileWrapper.innerHTML = `<img src="${item.src}" class="w-full h-64 object-cover" alt="${item.alt}">`;
+                mobileGalleryTrack.appendChild(mobileWrapper);
+            });
+            // Desktop Gallery: Floating Images with Collision
+            if (galleryContainer) {
+                const imageWrappers = galleryContainer.querySelectorAll('.gallery-image-wrapper');
+                const galleryParticles = [];
+                
+                function initializeGallery() {
+                    galleryParticles.length = 0; // Clear previous particles
+                    const containerRect = galleryContainer.getBoundingClientRect();
+                    imageWrappers.forEach(wrapper => {
+                        const wrapperRect = wrapper.getBoundingClientRect();
+                        const radius = wrapperRect.width / 2;
+                        let particle;
+                        let isOverlapping;
+                        let attempts = 0;
+
+                        do {
+                            isOverlapping = false;
+                            particle = {
+                                el: wrapper,
+                                x: Math.random() * (containerRect.width - wrapperRect.width),
+                                y: Math.random() * (containerRect.height - wrapperRect.height),
+                                vx: (Math.random() - 0.5) * 0.5,
+                                vy: (Math.random() - 0.5) * 0.5,
+                                radius: radius
+                            };
+
+                            for (const other of galleryParticles) {
+                                const dx = (particle.x + particle.radius) - (other.x + other.radius);
+                                const dy = (particle.y + particle.radius) - (other.y + other.radius);
+                                const distance = Math.sqrt(dx * dx + dy * dy);
+                                if (distance < particle.radius + other.radius + 5) { // Added buffer
+                                    isOverlapping = true;
+                                    break;
+                                }
+                            }
+                            attempts++;
+                        } while (isOverlapping && attempts < 100);
+                        
+                        galleryParticles.push(particle);
+                    });
+                }
+                
+                function resolveCollision(p1, p2) {
+                    const dx = (p2.x + p2.radius) - (p1.x + p1.radius);
+                    const dy = (p2.y + p2.radius) - (p1.y + p1.radius);
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < p1.radius + p2.radius) {
+                        const normalX = dx / distance;
+                        const normalY = dy / distance;
+                        const tangentX = -normalY;
+                        const tangentY = normalX;
+                        const dpTan1 = p1.vx * tangentX + p1.vy * tangentY;
+                        const dpTan2 = p2.vx * tangentX + p2.vy * tangentY;
+                        const dpNorm1 = p1.vx * normalX + p1.vy * normalY;
+                        const dpNorm2 = p2.vx * normalX + p2.vy * normalY;
+                        const m1 = dpNorm2;
+                        const m2 = dpNorm1;
+                        p1.vx = tangentX * dpTan1 + normalX * m1;
+                        p1.vy = tangentY * dpTan1 + normalY * m1;
+                        p2.vx = tangentX * dpTan2 + normalX * m2;
+                        p2.vy = tangentY * dpTan2 + normalY * m2;
+                        const overlap = 0.5 * (p1.radius + p2.radius - distance + 1);
+                        p1.x -= overlap * normalX;
+                        p1.y -= overlap * normalY;
+                        p2.x += overlap * normalX;
+                        p2.y += overlap * normalY;
+                    }
+                }
+
+                let animationFrameId;
+                function animateGallery() {
+                    const currentContainerRect = galleryContainer.getBoundingClientRect();
+                    galleryParticles.forEach((p, index) => {
+                        if (p.x <= 0 || p.x + p.radius * 2 >= currentContainerRect.width) p.vx *= -1;
+                        if (p.y <= 0 || p.y + p.radius * 2 >= currentContainerRect.height) p.vy *= -1;
+                        p.x = Math.max(0, Math.min(p.x, currentContainerRect.width - p.radius * 2));
+                        p.y = Math.max(0, Math.min(p.y, currentContainerRect.height - p.radius * 2));
+                        for (let i = index + 1; i < galleryParticles.length; i++) {
+                            resolveCollision(p, galleryParticles[i]);
+                        }
+                        p.x += p.vx;
+                        p.y += p.vy;
+                        p.el.style.transform = `translate(${p.x}px, ${p.y}px)`;
+                    });
+                    animationFrameId = requestAnimationFrame(animateGallery);
+                }
+                
+                // Use window.onload to ensure all assets are loaded and sizes are correct
+                window.onload = () => {
+                    if (window.innerWidth >= 768) { // md breakpoint
+                         initializeGallery();
+                         animateGallery();
+                    }
+                };
+
+                window.onresize = () => {
+                    if (window.innerWidth >= 768) {
+                        cancelAnimationFrame(animationFrameId);
+                        initializeGallery();
+                        animateGallery();
+                    } else {
+                        cancelAnimationFrame(animationFrameId);
+                    }
+                };
+            }
+
+            // Mobile Carousel Logic
+            const mobileGallery = document.getElementById('mobile-gallery');
+            if(mobileGallery) {
+                const track = document.getElementById('mobile-gallery-track');
+                const prevBtn = document.getElementById('prev-btn');
+                const nextBtn = document.getElementById('next-btn');
+                const slides = Array.from(track.children);
+                const slideCount = slides.length;
+                let currentIndex = 0;
+
+                function updateCarousel() {
+                    track.style.transform = `translateX(-${currentIndex * 100}%)`;
+                }
+
+                nextBtn.addEventListener('click', () => {
+                    currentIndex = (currentIndex + 1) % slideCount;
+                    updateCarousel();
+                });
+
+                prevBtn.addEventListener('click', () => {
+                    currentIndex = (currentIndex - 1 + slideCount) % slideCount;
+                    updateCarousel();
+                });
+                
+                // Swipe functionality
+                let touchStartX = 0;
+                let touchEndX = 0;
+
+                track.addEventListener('touchstart', (e) => {
+                    touchStartX = e.changedTouches[0].screenX;
+                });
+
+                track.addEventListener('touchend', (e) => {
+                    touchEndX = e.changedTouches[0].screenX;
+                    handleSwipe();
+                });
+
+                function handleSwipe() {
+                    if (touchEndX < touchStartX) { // Swiped left
+                        nextBtn.click();
+                    }
+                    if (touchEndX > touchStartX) { // Swiped right
+                        prevBtn.click();
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
