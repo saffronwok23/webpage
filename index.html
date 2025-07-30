@@ -240,28 +240,33 @@
             const heroLogo = document.getElementById('hero-logo');
 
             function hideLoader() {
-                loader.classList.add('hidden');
-                setTimeout(() => {
-                    loader.style.display = 'none';
-                    heroLogo.classList.add('visible');
-                }, 1000); 
+                 if (!loader.classList.contains('hidden')) {
+                    loader.classList.add('hidden');
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                        heroLogo.classList.add('visible');
+                    }, 1000); 
+                }
             }
 
             // Check if the video can play
-            const playPromise = loaderVideo.play();
-            if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    // Autoplay started
-                    loaderVideo.addEventListener('ended', hideLoader);
-                }).catch(error => {
-                    // Autoplay was prevented. Hide loader immediately.
-                    hideLoader();
-                });
+            if (window.innerWidth < 768) {
+                loader.style.display = 'none';
+                heroLogo.classList.add('visible');
             } else {
-                 hideLoader();
+                // Start playing the video
+                const playPromise = loaderVideo.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        // If autoplay fails, hide the loader immediately.
+                        console.error("Video autoplay failed:", error);
+                        hideLoader();
+                    });
+                }
+                // Set a timer to hide the loader after 6 seconds
+                setTimeout(hideLoader, 7000);
             }
 
-            setTimeout(hideLoader, 7000);
 
             // Fire Canvas Animation
             const canvas = document.getElementById('fire-canvas');
