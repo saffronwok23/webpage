@@ -21,34 +21,34 @@
 </head>
 <body class="text-gray-200">
 
-    <div class="container mx-auto px-4 sm:px-6 py-12 max-w-screen-2xl">
+    <div class="container mx-auto px-4 sm:px-6 py-8 max-w-screen-2xl">
 
         <!-- Logo Section -->
-        <header class="text-center mb-16">
+        <header class="text-center mb-12">
             <a href="/" class="inline-block">
                 <div class="text-center">
-                    <!-- Reduced logo size for TV -->
-                    <span class="text-6xl lg:text-7xl font-logo text-amber-300">Saffron Wok</span>
-                    <span class="block text-lg text-gray-400 tracking-widest mt-2">EST 2023</span>
+                    <!-- Further reduced logo size for TV -->
+                    <span class="text-5xl lg:text-6xl font-logo text-amber-300">Saffron Wok</span>
+                    <span class="block text-md lg:text-lg text-gray-400 tracking-widest mt-2">EST 2023</span>
                 </div>
             </a>
         </header>
 
         <!-- On extra large screens (TV), this becomes a 3-column grid -->
-        <main id="menu-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-12 gap-y-12">
+        <main id="menu-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-10 gap-y-10">
             <!-- Columns will be populated by JS -->
-            <div id="menu-col-1" class="space-y-12"></div>
-            <div id="menu-col-2" class="space-y-12"></div>
-            <div id="menu-col-3" class="space-y-12"></div>
+            <div id="menu-col-1" class="space-y-10"></div>
+            <div id="menu-col-2" class="space-y-10"></div>
+            <div id="menu-col-3" class="space-y-10"></div>
         </main>
 
         <!-- Footer Section -->
-        <footer class="mt-20 text-center">
-             <!-- Reduced footer size for TV -->
-            <div class="inline-block px-8 py-4 bg-orange-600 text-white font-bold rounded-md text-xl lg:text-2xl mx-2">
+        <footer class="mt-16 text-center">
+             <!-- Further reduced footer size for TV -->
+            <div class="inline-block px-6 py-3 bg-orange-600 text-white font-bold rounded-md text-lg lg:text-xl mx-2">
                 Expert Catering For Any Occasion
             </div>
-            <div class="inline-block px-8 py-4 bg-gray-800 text-white font-bold rounded-md text-xl lg:text-2xl mt-4 sm:mt-0 mx-2">
+            <div class="inline-block px-6 py-3 bg-gray-800 text-white font-bold rounded-md text-lg lg:text-xl mt-4 sm:mt-0 mx-2">
                 404-740-9201
             </div>
         </footer>
@@ -79,32 +79,32 @@
                     data.categories.forEach(category => {
                         const section = document.createElement('section');
 
-                        // Reduced header for TV
+                        // Further reduced header for TV
                         const header = document.createElement('h2');
-                        header.className = 'text-3xl lg:text-4xl font-bold text-center mb-8 px-4 py-3 bg-orange-600 text-white rounded-md uppercase tracking-wider';
+                        header.className = 'text-2xl lg:text-3xl font-bold text-center mb-6 px-4 py-2 bg-orange-600 text-white rounded-md uppercase tracking-wider';
                         header.textContent = category.name;
                         section.appendChild(header);
 
-                        // Reduced image for TV
+                        // Further reduced image for TV
                         if (category.categoryImageUrl) {
                             const img = document.createElement('img');
                             img.src = category.categoryImageUrl;
                             img.alt = category.name;
-                            img.className = 'rounded-lg shadow-lg mb-8 w-full h-56 lg:h-64 object-cover';
+                            img.className = 'rounded-lg shadow-lg mb-6 w-full h-48 lg:h-56 object-cover';
                             section.appendChild(img);
                         }
 
-                        // Reduced text sizes for menu items
+                        // Further reduced text sizes for menu items
                         const itemsContainer = document.createElement('div');
-                        itemsContainer.className = 'space-y-6 px-2';
+                        itemsContainer.className = 'space-y-4 px-2';
                         category.items.forEach(item => {
                             itemsContainer.innerHTML += `
                                 <div class="flex justify-between items-baseline">
                                     <div>
-                                        <p class="font-semibold text-xl lg:text-2xl text-amber-100">${item.name}</p>
-                                        <p class="text-base lg:text-lg text-gray-400">${item.vietnameseName}</p>
+                                        <p class="font-semibold text-lg lg:text-xl text-amber-100">${item.name}</p>
+                                        <p class="text-sm lg:text-base text-gray-400">${item.vietnameseName}</p>
                                     </div>
-                                    <p class="font-bold text-xl lg:text-2xl text-gray-200 pl-4 text-right">${item.price}</p>
+                                    <p class="font-bold text-lg lg:text-xl text-gray-200 pl-4 text-right">${item.price}</p>
                                 </div>
                             `;
                         });
@@ -122,7 +122,7 @@
                     console.error('Error fetching menu:', error);
                     const menuContainer = document.getElementById('menu-container');
                     if(menuContainer) {
-                        menuContainer.innerHTML = '<p class="text-center text-red-400 text-2xl">Could not load menu. Please try again later.</p>';
+                        menuContainer.innerHTML = '<p class="text-center text-red-400 text-xl">Could not load menu. Please try again later.</p>';
                     }
                 });
         });
