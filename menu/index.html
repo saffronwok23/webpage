@@ -27,9 +27,9 @@
         <header class="text-center mb-16">
             <a href="/" class="inline-block">
                 <div class="text-center">
-                    <!-- Increased logo size for TV -->
-                    <span class="text-6xl lg:text-8xl font-logo text-amber-300">Saffron Wok</span>
-                    <span class="block text-lg lg:text-xl text-gray-400 tracking-widest mt-2">EST 2023</span>
+                    <!-- Reduced logo size for TV -->
+                    <span class="text-6xl lg:text-7xl font-logo text-amber-300">Saffron Wok</span>
+                    <span class="block text-lg text-gray-400 tracking-widest mt-2">EST 2023</span>
                 </div>
             </a>
         </header>
@@ -44,11 +44,11 @@
 
         <!-- Footer Section -->
         <footer class="mt-20 text-center">
-             <!-- Increased footer size for TV -->
-            <div class="inline-block px-8 py-4 bg-orange-600 text-white font-bold rounded-md text-2xl lg:text-3xl mx-2">
+             <!-- Reduced footer size for TV -->
+            <div class="inline-block px-8 py-4 bg-orange-600 text-white font-bold rounded-md text-xl lg:text-2xl mx-2">
                 Expert Catering For Any Occasion
             </div>
-            <div class="inline-block px-8 py-4 bg-gray-800 text-white font-bold rounded-md text-2xl lg:text-3xl mt-4 sm:mt-0 mx-2">
+            <div class="inline-block px-8 py-4 bg-gray-800 text-white font-bold rounded-md text-xl lg:text-2xl mt-4 sm:mt-0 mx-2">
                 404-740-9201
             </div>
         </footer>
@@ -79,32 +79,32 @@
                     data.categories.forEach(category => {
                         const section = document.createElement('section');
 
-                        // Larger header for TV
+                        // Reduced header for TV
                         const header = document.createElement('h2');
-                        header.className = 'text-4xl lg:text-5xl font-bold text-center mb-8 px-4 py-3 bg-orange-600 text-white rounded-md uppercase tracking-wider';
+                        header.className = 'text-3xl lg:text-4xl font-bold text-center mb-8 px-4 py-3 bg-orange-600 text-white rounded-md uppercase tracking-wider';
                         header.textContent = category.name;
                         section.appendChild(header);
 
-                        // Larger image for TV
+                        // Reduced image for TV
                         if (category.categoryImageUrl) {
                             const img = document.createElement('img');
                             img.src = category.categoryImageUrl;
                             img.alt = category.name;
-                            img.className = 'rounded-lg shadow-lg mb-8 w-full h-64 lg:h-80 object-cover';
+                            img.className = 'rounded-lg shadow-lg mb-8 w-full h-56 lg:h-64 object-cover';
                             section.appendChild(img);
                         }
 
-                        // Larger text sizes for menu items
+                        // Reduced text sizes for menu items
                         const itemsContainer = document.createElement('div');
                         itemsContainer.className = 'space-y-6 px-2';
                         category.items.forEach(item => {
                             itemsContainer.innerHTML += `
                                 <div class="flex justify-between items-baseline">
                                     <div>
-                                        <p class="font-semibold text-2xl lg:text-3xl text-amber-100">${item.name}</p>
-                                        <p class="text-lg lg:text-xl text-gray-400">${item.vietnameseName}</p>
+                                        <p class="font-semibold text-xl lg:text-2xl text-amber-100">${item.name}</p>
+                                        <p class="text-base lg:text-lg text-gray-400">${item.vietnameseName}</p>
                                     </div>
-                                    <p class="font-bold text-2xl lg:text-3xl text-gray-200 pl-4 text-right">${item.price}</p>
+                                    <p class="font-bold text-xl lg:text-2xl text-gray-200 pl-4 text-right">${item.price}</p>
                                 </div>
                             `;
                         });
