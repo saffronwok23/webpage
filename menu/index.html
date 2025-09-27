@@ -34,8 +34,8 @@
             </a>
         </header>
 
-        <!-- On extra large screens (TV), this becomes a 3-column grid -->
-        <main id="menu-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-8">
+        <!-- Use Flexbox on XL screens to guarantee a single row -->
+        <main id="menu-container" class="grid grid-cols-1 md:grid-cols-2 xl:flex xl:gap-x-8">
             <!-- Menu categories will be populated by JS here -->
         </main>
 
@@ -68,6 +68,8 @@
                     
                     data.categories.forEach(category => {
                         const section = document.createElement('section');
+                        // On XL screens, each section takes up 1/3 of the width
+                        section.className = 'xl:w-1/3';
 
                         // Final reduced header
                         const header = document.createElement('h2');
