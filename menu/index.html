@@ -36,10 +36,7 @@
 
         <!-- On extra large screens (TV), this becomes a 3-column grid -->
         <main id="menu-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-8">
-            <!-- Columns will be populated by JS -->
-            <div id="menu-col-1" class="space-y-8"></div>
-            <div id="menu-col-2" class="space-y-8"></div>
-            <div id="menu-col-3" class="space-y-8"></div>
+            <!-- Menu categories will be populated by JS here -->
         </main>
 
         <!-- Footer Section -->
@@ -63,19 +60,12 @@
                     return response.json();
                 })
                 .then(data => {
-                    const col1 = document.getElementById('menu-col-1');
-                    const col2 = document.getElementById('menu-col-2');
-                    const col3 = document.getElementById('menu-col-3');
-                    if (!col1 || !col2 || !col3) return;
+                    const menuContainer = document.getElementById('menu-container');
+                    if (!menuContainer) return;
 
-                    // Clear columns for regenerating
-                    col1.innerHTML = '';
-                    col2.innerHTML = '';
-                    col3.innerHTML = '';
+                    // Clear container for regenerating
+                    menuContainer.innerHTML = '';
                     
-                    const columns = [col1, col2, col3];
-                    let currentColumnIndex = 0;
-
                     data.categories.forEach(category => {
                         const section = document.createElement('section');
 
@@ -111,11 +101,8 @@
                         
                         section.appendChild(itemsContainer);
 
-                        // Distribute sections into columns
-                        columns[currentColumnIndex].appendChild(section);
-                        
-                        // Move to the next column, cycling back to the first if needed
-                        currentColumnIndex = (currentColumnIndex + 1) % columns.length;
+                        // Append the entire category section directly to the grid container
+                        menuContainer.appendChild(section);
                     });
                 })
                 .catch(error => {
