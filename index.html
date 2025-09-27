@@ -405,7 +405,7 @@
                     const menuItemEl = document.createElement('div');
                     menuItemEl.className = 'menu-item bg-[#1a1a1a] rounded-lg overflow-hidden border border-gray-700 flex flex-col';
                     menuItemEl.innerHTML = `
-                        <img src="./Menu/${item.name}.jpg" alt="${item.name}" class="w-full h-48 object-cover">
+                        <img src="./img/${item.name}.jpg" alt="${item.name}" class="w-full h-48 object-cover">
                         <div class="p-6 flex-grow flex flex-col">
                             <h3 class="text-xl font-bold font-cinzel mb-2 flex-grow">${item.name}</h3>
                             <p class="text-gray-400 text-sm">${item.vietnameseName}</p>
@@ -456,13 +456,13 @@
                 // Populate Desktop Gallery
                 const desktopWrapper = document.createElement('div');
                 desktopWrapper.className = `gallery-image-wrapper ${item.sizeClasses}`;
-                desktopWrapper.innerHTML = `<img class="w-full h-full rounded-full object-cover border-4 border-gray-700 shadow-lg" src="./Menu/${item.name}.jpg" alt="${item.alt}">`;
+                desktopWrapper.innerHTML = `<img class="w-full h-full rounded-full object-cover border-4 border-gray-700 shadow-lg" src="./img/${item.name}.jpg" alt="${item.alt}">`;
                 galleryContainer.appendChild(desktopWrapper);
 
                 // Populate Mobile Gallery
                 const mobileWrapper = document.createElement('div');
                 mobileWrapper.className = 'w-full flex-shrink-0';
-                mobileWrapper.innerHTML = `<img src="./Menu/${item.name}.jpg" class="w-full h-64 object-cover" alt="${item.alt}">`;
+                mobileWrapper.innerHTML = `<img src="./img/${item.name}.jpg" class="w-full h-64 object-cover" alt="${item.alt}">`;
                 mobileGalleryTrack.appendChild(mobileWrapper);
             });
             // Desktop Gallery: Floating Images with Collision

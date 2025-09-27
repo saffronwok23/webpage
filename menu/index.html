@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale-1.0">
+    <title>Saffron Wok Menu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a1a1a;
+            background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+        }
+        .font-logo {
+            font-family: 'Playfair Display', serif;
+        }
+    </style>
+</head>
+<body class="text-gray-200">
+
+    <div class="container mx-auto px-4 sm:px-6 py-8 max-w-6xl">
+
+        <!-- Logo Section -->
+        <header class="text-center mb-12">
+            <a href="/" class="inline-block">
+                <div class="text-center">
+                    <span class="text-5xl font-logo text-amber-300">Saffron Wok</span>
+                    <span class="block text-sm text-gray-400 tracking-widest">EST 2023</span>
+                </div>
+            </a>
+        </header>
+
+        <!-- On large screens, this becomes a 2-column grid -->
+        <main id="menu-container" class="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-12 gap-y-12">
+            <!-- Column 1: Appetizers -->
+            <div id="menu-col-1" class="space-y-12"></div>
+            <!-- Column 2: Plates & For 2 or More -->
+            <div id="menu-col-2" class="space-y-12"></div>
+        </main>
+
+        <!-- Footer Section -->
+        <footer class="mt-16 text-center">
+            <div class="inline-block px-6 py-3 bg-orange-600 text-white font-bold rounded-md text-lg">
+                Expert Catering For Any Occasion
+            </div>
+            <div class="inline-block px-6 py-3 bg-gray-800 text-white font-bold rounded-md text-lg mt-4 lg:mt-0 lg:ml-4">
+                404-740-9201
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('menu.json')
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.json();
+                })
+                .then(data => {
+                    const col1 = document.getElementById('menu-col-1');
+                    const col2 = document.getElementById('menu-col-2');
+                    if (!col1 || !col2) return;
+
+                    data.categories.forEach(category => {
+                        const section = document.createElement('section');
+
+                        const header = document.createElement('h2');
+                        header.className = 'text-2xl font-bold text-center mb-6 px-4 py-2 bg-orange-600 text-white rounded-md uppercase tracking-wider';
+                        header.textContent = category.name;
+                        section.appendChild(header);
+
+                        // Add category image if it exists
+                        if (category.categoryImageUrl) {
+                            const img = document.createElement('img');
+                            img.src = category.categoryImageUrl;
+                            img.alt = category.name;
+                            img.className = 'rounded-lg shadow-lg mb-6 w-full h-48 object-cover';
+                            section.appendChild(img);
+                        }
+
+                        const itemsContainer = document.createElement('div');
+                        itemsContainer.className = 'space-y-4 px-2';
+                        category.items.forEach(item => {
+                            itemsContainer.innerHTML += `
+                                <div class="flex justify-between items-baseline">
+                                    <div>
+                                        <p class="font-semibold text-lg text-amber-100">${item.name}</p>
+                                        <p class="text-sm text-gray-400">${item.vietnameseName}</p>
+                                    </div>
+                                    <p class="font-bold text-lg text-gray-200 pl-4 text-right">${item.price}</p>
+                                </div>
+                            `;
+                        });
+                        
+                        section.appendChild(itemsContainer);
+
+                        // Place the entire section in the correct column
+                        if (category.name === 'Appetizer') {
+                            col1.appendChild(section);
+                        } else {
+                            col2.appendChild(section);
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching menu:', error);
+                    const menuContainer = document.getElementById('menu-container');
+                    if(menuContainer) {
+                        menuContainer.innerHTML = '<p class="text-center text-red-400">Could not load menu. Please try again later.</p>';
+                    }
+                });
+        });
+    </script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale-1.0">
+    <title>Saffron Wok Menu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a1a1a;
+            background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+        }
+        .font-logo {
+            font-family: 'Playfair Display', serif;
+        }
+    </style>
+</head>
+<body class="text-gray-200">
+
+    <div class="container mx-auto px-4 sm:px-6 py-8 max-w-6xl">
+
+        <!-- Logo Section -->
+        <header class="text-center mb-12">
+            <a href="/" class="inline-block">
+                <div class="text-center">
+                    <span class="text-5xl font-logo text-amber-300">Saffron Wok</span>
+                    <span class="block text-sm text-gray-400 tracking-widest">EST 2023</span>
+                </div>
+            </a>
+        </header>
+
+        <!-- On large screens, this becomes a 2-column grid -->
+        <main id="menu-container" class="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-12 gap-y-12">
+            <!-- Column 1: Appetizers -->
+            <div id="menu-col-1" class="space-y-12"></div>
+            <!-- Column 2: Plates & For 2 or More -->
+            <div id="menu-col-2" class="space-y-12"></div>
+        </main>
+
+        <!-- Footer Section -->
+        <footer class="mt-16 text-center">
+            <div class="inline-block px-6 py-3 bg-orange-600 text-white font-bold rounded-md text-lg">
+                Expert Catering For Any Occasion
+            </div>
+            <div class="inline-block px-6 py-3 bg-gray-800 text-white font-bold rounded-md text-lg mt-4 lg:mt-0 lg:ml-4">
+                404-740-9201
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('menu.json')
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.json();
+                })
+                .then(data => {
+                    const col1 = document.getElementById('menu-col-1');
+                    const col2 = document.getElementById('menu-col-2');
+                    if (!col1 || !col2) return;
+
+                    data.categories.forEach(category => {
+                        const section = document.createElement('section');
+
+                        const header = document.createElement('h2');
+                        header.className = 'text-2xl font-bold text-center mb-6 px-4 py-2 bg-orange-600 text-white rounded-md uppercase tracking-wider';
+                        header.textContent = category.name;
+                        section.appendChild(header);
+
+                        // Add category image if it exists
+                        if (category.categoryImageUrl) {
+                            const img = document.createElement('img');
+                            img.src = category.categoryImageUrl;
+                            img.alt = category.name;
+                            img.className = 'rounded-lg shadow-lg mb-6 w-full h-48 object-cover';
+                            section.appendChild(img);
+                        }
+
+                        const itemsContainer = document.createElement('div');
+                        itemsContainer.className = 'space-y-4 px-2';
+                        category.items.forEach(item => {
+                            itemsContainer.innerHTML += `
+                                <div class="flex justify-between items-baseline">
+                                    <div>
+                                        <p class="font-semibold text-lg text-amber-100">${item.name}</p>
+                                        <p class="text-sm text-gray-400">${item.vietnameseName}</p>
+                                    </div>
+                                    <p class="font-bold text-lg text-gray-200 pl-4 text-right">${item.price}</p>
+                                </div>
+                            `;
+                        });
+                        
+                        section.appendChild(itemsContainer);
+
+                        // Place the entire section in the correct column
+                        if (category.name === 'Appetizer') {
+                            col1.appendChild(section);
+                        } else {
+                            col2.appendChild(section);
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching menu:', error);
+                    const menuContainer = document.getElementById('menu-container');
+                    if(menuContainer) {
+                        menuContainer.innerHTML = '<p class="text-center text-red-400">Could not load menu. Please try again later.</p>';
+                    }
+                });
+        });
+    </script>
+
+</body>
+</html>
+
