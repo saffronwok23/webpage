@@ -1,0 +1,68 @@
+{
+  "categories": [
+    {
+      "name": "Appetizer",
+      "items": [
+        {
+          "name": "Corn Stir Fried",
+          "vietnameseName": "Bắp Xào",
+          "price": "$7"
+        },
+        {
+          "name": "Grill Chicken Paws",
+          "vietnameseName": "Chân Gà Nướng Sate",
+          "price": "$7"
+        },
+        {
+          "name": "BBQ House Special Pork Skewer",
+          "vietnameseName": "Thịt Xiên Nướng Đặc Biệt",
+          "price": "$5/2ea - $12/5ea"
+        },
+        {
+          "name": "BBQ House Special Beef Skewer",
+          "vietnameseName": "Bò Xiên Đặc Biệt",
+          "price": "$7/2ea - $13/4ea"
+        },
+        {
+          "name": "House Special Wings Sate",
+          "vietnameseName": "Cánh Gà Nướng Sate Đặc Biệt",
+          "price": "$13/5ea"
+        }
+      ]
+    },
+    {
+      "name": "Plates",
+      "items": [
+        {
+          "name": "Grill Bread + BBQ House Special Pork Skewers",
+          "vietnameseName": "Bánh Mì Nướng + Thịt Xiên Nướng Đặc Biệt",
+          "price": "$13",
+          "imageUrl": "https://placehold.co/600x400/a16207/ffffff?text=Pork+Skewer+Plate"
+        },
+        {
+          "name": "Grill Bread + BBQ House Special Beef Skewer",
+          "vietnameseName": "Bánh Mì Nướng + Bò Xiên Đặc Biệt",
+          "price": "$14",
+          "imageUrl": "https://placehold.co/600x400/a16207/ffffff?text=Beef+Skewer+Plate"
+        }
+      ]
+    },
+    {
+      "name": "For 2 or More",
+      "items": [
+        {
+          "name": "Grill Bread + BBQ House Special Half Chicken",
+          "vietnameseName": "1 Bánh Mì Nướng + ½ Con Gà Nướng Đặc Biệt",
+          "price": "$17",
+          "imageUrl": "https://placehold.co/600x400/a16207/ffffff?text=Half+Chicken+Plate"
+        },
+        {
+          "name": "2 Grill Bread + BBQ House Special Full Chicken",
+          "vietnameseName": "2 Bánh Mì Nướng + Gà Nướng Nguyên Con Đặc Biệt",
+          "price": "$30",
+          "imageUrl": "https://placehold.co/600x400/a16207/ffffff?text=Full+Chicken+Plate"
+        }
+      ]
+    }
+  ]
+}
