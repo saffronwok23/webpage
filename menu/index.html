@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale-1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Saffron Wok Menu</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,32 +21,34 @@
 </head>
 <body class="text-gray-200">
 
-    <div class="container mx-auto px-4 sm:px-6 py-8 max-w-6xl">
+    <div class="container mx-auto px-4 sm:px-6 py-12 max-w-screen-2xl">
 
         <!-- Logo Section -->
-        <header class="text-center mb-12">
+        <header class="text-center mb-16">
             <a href="/" class="inline-block">
                 <div class="text-center">
-                    <span class="text-5xl font-logo text-amber-300">Saffron Wok</span>
-                    <span class="block text-sm text-gray-400 tracking-widest">EST 2023</span>
+                    <!-- Increased logo size for TV -->
+                    <span class="text-6xl lg:text-8xl font-logo text-amber-300">Saffron Wok</span>
+                    <span class="block text-lg lg:text-xl text-gray-400 tracking-widest mt-2">EST 2023</span>
                 </div>
             </a>
         </header>
 
-        <!-- On large screens, this becomes a 2-column grid -->
-        <main id="menu-container" class="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-12 gap-y-12">
-            <!-- Column 1: Appetizers -->
+        <!-- On extra large screens (TV), this becomes a 3-column grid -->
+        <main id="menu-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-12 gap-y-12">
+            <!-- Columns will be populated by JS -->
             <div id="menu-col-1" class="space-y-12"></div>
-            <!-- Column 2: Plates & For 2 or More -->
             <div id="menu-col-2" class="space-y-12"></div>
+            <div id="menu-col-3" class="space-y-12"></div>
         </main>
 
         <!-- Footer Section -->
-        <footer class="mt-16 text-center">
-            <div class="inline-block px-6 py-3 bg-orange-600 text-white font-bold rounded-md text-lg">
+        <footer class="mt-20 text-center">
+             <!-- Increased footer size for TV -->
+            <div class="inline-block px-8 py-4 bg-orange-600 text-white font-bold rounded-md text-2xl lg:text-3xl mx-2">
                 Expert Catering For Any Occasion
             </div>
-            <div class="inline-block px-6 py-3 bg-gray-800 text-white font-bold rounded-md text-lg mt-4 lg:mt-0 lg:ml-4">
+            <div class="inline-block px-8 py-4 bg-gray-800 text-white font-bold rounded-md text-2xl lg:text-3xl mt-4 sm:mt-0 mx-2">
                 404-740-9201
             </div>
         </footer>
@@ -63,175 +65,64 @@
                 .then(data => {
                     const col1 = document.getElementById('menu-col-1');
                     const col2 = document.getElementById('menu-col-2');
-                    if (!col1 || !col2) return;
+                    const col3 = document.getElementById('menu-col-3');
+                    if (!col1 || !col2 || !col3) return;
+
+                    // Clear columns for regenerating
+                    col1.innerHTML = '';
+                    col2.innerHTML = '';
+                    col3.innerHTML = '';
+                    
+                    const columns = [col1, col2, col3];
+                    let currentColumnIndex = 0;
 
                     data.categories.forEach(category => {
                         const section = document.createElement('section');
 
+                        // Larger header for TV
                         const header = document.createElement('h2');
-                        header.className = 'text-2xl font-bold text-center mb-6 px-4 py-2 bg-orange-600 text-white rounded-md uppercase tracking-wider';
+                        header.className = 'text-4xl lg:text-5xl font-bold text-center mb-8 px-4 py-3 bg-orange-600 text-white rounded-md uppercase tracking-wider';
                         header.textContent = category.name;
                         section.appendChild(header);
 
-                        // Add category image if it exists
+                        // Larger image for TV
                         if (category.categoryImageUrl) {
                             const img = document.createElement('img');
                             img.src = category.categoryImageUrl;
                             img.alt = category.name;
-                            img.className = 'rounded-lg shadow-lg mb-6 w-full h-48 object-cover';
+                            img.className = 'rounded-lg shadow-lg mb-8 w-full h-64 lg:h-80 object-cover';
                             section.appendChild(img);
                         }
 
+                        // Larger text sizes for menu items
                         const itemsContainer = document.createElement('div');
-                        itemsContainer.className = 'space-y-4 px-2';
+                        itemsContainer.className = 'space-y-6 px-2';
                         category.items.forEach(item => {
                             itemsContainer.innerHTML += `
                                 <div class="flex justify-between items-baseline">
                                     <div>
-                                        <p class="font-semibold text-lg text-amber-100">${item.name}</p>
-                                        <p class="text-sm text-gray-400">${item.vietnameseName}</p>
+                                        <p class="font-semibold text-2xl lg:text-3xl text-amber-100">${item.name}</p>
+                                        <p class="text-lg lg:text-xl text-gray-400">${item.vietnameseName}</p>
                                     </div>
-                                    <p class="font-bold text-lg text-gray-200 pl-4 text-right">${item.price}</p>
+                                    <p class="font-bold text-2xl lg:text-3xl text-gray-200 pl-4 text-right">${item.price}</p>
                                 </div>
                             `;
                         });
                         
                         section.appendChild(itemsContainer);
 
-                        // Place the entire section in the correct column
-                        if (category.name === 'Appetizer') {
-                            col1.appendChild(section);
-                        } else {
-                            col2.appendChild(section);
-                        }
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching menu:', error);
-                    const menuContainer = document.getElementById('menu-container');
-                    if(menuContainer) {
-                        menuContainer.innerHTML = '<p class="text-center text-red-400">Could not load menu. Please try again later.</p>';
-                    }
-                });
-        });
-    </script>
-
-</body>
-</html>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale-1.0">
-    <title>Saffron Wok Menu</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #1a1a1a;
-            background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
-        }
-        .font-logo {
-            font-family: 'Playfair Display', serif;
-        }
-    </style>
-</head>
-<body class="text-gray-200">
-
-    <div class="container mx-auto px-4 sm:px-6 py-8 max-w-6xl">
-
-        <!-- Logo Section -->
-        <header class="text-center mb-12">
-            <a href="/" class="inline-block">
-                <div class="text-center">
-                    <span class="text-5xl font-logo text-amber-300">Saffron Wok</span>
-                    <span class="block text-sm text-gray-400 tracking-widest">EST 2023</span>
-                </div>
-            </a>
-        </header>
-
-        <!-- On large screens, this becomes a 2-column grid -->
-        <main id="menu-container" class="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-12 gap-y-12">
-            <!-- Column 1: Appetizers -->
-            <div id="menu-col-1" class="space-y-12"></div>
-            <!-- Column 2: Plates & For 2 or More -->
-            <div id="menu-col-2" class="space-y-12"></div>
-        </main>
-
-        <!-- Footer Section -->
-        <footer class="mt-16 text-center">
-            <div class="inline-block px-6 py-3 bg-orange-600 text-white font-bold rounded-md text-lg">
-                Expert Catering For Any Occasion
-            </div>
-            <div class="inline-block px-6 py-3 bg-gray-800 text-white font-bold rounded-md text-lg mt-4 lg:mt-0 lg:ml-4">
-                404-740-9201
-            </div>
-        </footer>
-
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            fetch('menu.json')
-                .then(response => {
-                    if (!response.ok) throw new Error('Network response was not ok');
-                    return response.json();
-                })
-                .then(data => {
-                    const col1 = document.getElementById('menu-col-1');
-                    const col2 = document.getElementById('menu-col-2');
-                    if (!col1 || !col2) return;
-
-                    data.categories.forEach(category => {
-                        const section = document.createElement('section');
-
-                        const header = document.createElement('h2');
-                        header.className = 'text-2xl font-bold text-center mb-6 px-4 py-2 bg-orange-600 text-white rounded-md uppercase tracking-wider';
-                        header.textContent = category.name;
-                        section.appendChild(header);
-
-                        // Add category image if it exists
-                        if (category.categoryImageUrl) {
-                            const img = document.createElement('img');
-                            img.src = category.categoryImageUrl;
-                            img.alt = category.name;
-                            img.className = 'rounded-lg shadow-lg mb-6 w-full h-48 object-cover';
-                            section.appendChild(img);
-                        }
-
-                        const itemsContainer = document.createElement('div');
-                        itemsContainer.className = 'space-y-4 px-2';
-                        category.items.forEach(item => {
-                            itemsContainer.innerHTML += `
-                                <div class="flex justify-between items-baseline">
-                                    <div>
-                                        <p class="font-semibold text-lg text-amber-100">${item.name}</p>
-                                        <p class="text-sm text-gray-400">${item.vietnameseName}</p>
-                                    </div>
-                                    <p class="font-bold text-lg text-gray-200 pl-4 text-right">${item.price}</p>
-                                </div>
-                            `;
-                        });
+                        // Distribute sections into columns
+                        columns[currentColumnIndex].appendChild(section);
                         
-                        section.appendChild(itemsContainer);
-
-                        // Place the entire section in the correct column
-                        if (category.name === 'Appetizer') {
-                            col1.appendChild(section);
-                        } else {
-                            col2.appendChild(section);
-                        }
+                        // Move to the next column, cycling back to the first if needed
+                        currentColumnIndex = (currentColumnIndex + 1) % columns.length;
                     });
                 })
                 .catch(error => {
                     console.error('Error fetching menu:', error);
                     const menuContainer = document.getElementById('menu-container');
                     if(menuContainer) {
-                        menuContainer.innerHTML = '<p class="text-center text-red-400">Could not load menu. Please try again later.</p>';
+                        menuContainer.innerHTML = '<p class="text-center text-red-400 text-2xl">Could not load menu. Please try again later.</p>';
                     }
                 });
         });
