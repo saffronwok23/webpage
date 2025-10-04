@@ -1,0 +1,51 @@
+{
+  "categories": [
+    {
+      "name": "Appetizer",
+      "items": [
+        {
+          "name": "Corn Stir Fried",
+          "vietnameseName": "Bắp Xào"
+        },
+        {
+          "name": "Grilled Jumbo Chicken Paws",
+          "vietnameseName": "Chân Gà Nướng Sate"
+        },
+        {
+          "name": "House Special Jumbo Wings Sate",
+          "vietnameseName": "Thịt Xiên Nướng Đặc Biệt"
+        }
+      ]
+    },
+    {
+      "name": "Plates",
+      "items": [
+        {
+          "name": "Special Pork Kebab with Season Grill Bánh Mì",
+          "vietnameseName": "Bánh Mì Nướng + Thịt Xiên Nướng Đặc Biệt",
+          "imageUrl": "https://placehold.co/600x400/a16207/ffffff?text=Pork+Skewer+Plate"
+        },
+        {
+          "name": "Special Beef Kebab with Season Grill Bánh Mì",
+          "vietnameseName": "Bánh Mì Nướng + Bò Xiên Đặc Biệt",
+          "imageUrl": "https://placehold.co/600x400/a16207/ffffff?text=Beef+Skewer+Plate"
+        }
+      ]
+    },
+    {
+      "name": "For 2 or More",
+      "items": [
+        {
+          "name": "Grill Bread + BBQ House Special Half Chicken",
+          "vietnameseName": "1 Bánh Mì Nướng + ½ Con Gà Nướng Đặc Biệt",
+          "imageUrl": "https://placehold.co/600x400/a16207/ffffff?text=Half+Chicken+Plate"
+        },
+        {
+          "name": "2 Grill Bread + BBQ House Special Full Chicken",
+          "vietnameseName": "2 Bánh Mì Nướng + Gà Nướng Nguyên Con Đặc Biệt",
+          "imageUrl": "https://placehold.co/600x400/a16207/ffffff?text=Full+Chicken+Plate"
+        }
+      ]
+    }
+  ]
+}

@@ -9,22 +9,12 @@
           "price": "$7"
         },
         {
-          "name": "Grill Chicken Paws",
+          "name": "Grilled Jumbo Chicken Paws",
           "vietnameseName": "Chân Gà Nướng Sate",
           "price": "$7"
         },
         {
-          "name": "BBQ House Special Pork Skewer",
-          "vietnameseName": "Thịt Xiên Nướng Đặc Biệt",
-          "price": "$5/2ea - $12/5ea"
-        },
-        {
-          "name": "BBQ House Special Beef Skewer",
-          "vietnameseName": "Bò Xiên Đặc Biệt",
-          "price": "$7/2ea - $13/4ea"
-        },
-        {
-          "name": "House Special Wings Sate",
+          "name": "House Special Jumbo Wings Sate",
           "vietnameseName": "Cánh Gà Nướng Sate Đặc Biệt",
           "price": "$13/5ea"
         }
@@ -34,13 +24,13 @@
       "name": "Plates",
       "items": [
         {
-          "name": "Grill Bread + BBQ House Special Pork Skewers",
+          "name": "Special Pork Kebab with Season Grill Bánh Mì",
           "vietnameseName": "Bánh Mì Nướng + Thịt Xiên Nướng Đặc Biệt",
           "price": "$13",
           "imageUrl": "https://placehold.co/600x400/a16207/ffffff?text=Pork+Skewer+Plate"
         },
         {
-          "name": "Grill Bread + BBQ House Special Beef Skewer",
+          "name": "Special Beef Kebab with Season Grill Bánh Mì",
           "vietnameseName": "Bánh Mì Nướng + Bò Xiên Đặc Biệt",
           "price": "$14",
           "imageUrl": "https://placehold.co/600x400/a16207/ffffff?text=Beef+Skewer+Plate"
