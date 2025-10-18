@@ -5,15 +5,18 @@
       "items": [
         {
           "name": "Corn Stir Fried",
-          "price": "$7"
+          "price": "$7",
+          "imageUrl": "corn.jpg"
         },
         {
           "name": "Grilled Jumbo Chicke Paws",
-          "price": "$7"
+          "price": "$7",
+          "imageUrl": "paws.jpg"
         },
         {
           "name": "Grilled Cheesy Potato",
-          "price": "$6"
+          "price": "$6",
+          "imageUrl": "potato.jpg"
         }
       ]
     },
@@ -22,19 +25,20 @@
       "items": [
         {
           "name": "House Special Jumbo Wings Sate",
-          "price": "$13/7ea"
+          "price": "$13/7ea",
+          "imageUrl": "wings.jpg"
         },
         {
           "name": "Special Pork Kebab with Season Grill Bánh Mì",
           "vietnameseName": "Bánh Mì",
           "price": "$14",
-          "imageUrl": "https://placehold.co/600x400/a16207/ffffff?text=Pork+Skewer+Plate"
+          "imageUrl": "saffron-wok-pork-kebab.jpg"
         },
         {
           "name": "Special Beef Kebab with Season Grill Bánh Mì",
           "vietnameseName": "Bánh Mì",
           "price": "$16",
-          "imageUrl": "https://placehold.co/600x400/a16207/ffffff?text=Beef+Skewer+Plate"
+          "imageUrl": "saffron-wok-beef-kebab.jpg"
         }
       ]
     },
@@ -43,17 +47,19 @@
       "items": [
         {
           "name": "Saigon Flame Squid Kebob",
-          "price": "$20"
+          "price": "$20",
+          "imageUrl": "squid-kebab.jpg"
+
         },
         {
           "name": "Grill Bread + BBQ House Special Half Chicken",
           "price": "$17",
-          "imageUrl": "https://placehold.co/600x400/a16207/ffffff?text=Half+Chicken+Plate"
+          "imageUrl": "half-chick-kebab.jpg"
         },
         {
           "name": "2 Grill Bread + BBQ House Special Full Chicken",
           "price": "$30",
-          "imageUrl": "https://placehold.co/600x400/a16207/ffffff?text=Full+Chicken+Plate"
+          "imageUrl": "whole-chick-kebab.jpg"
         }
       ]
     },
