@@ -32,13 +32,13 @@
           "name": "Special Pork Kebab with Season Grill Bánh Mì",
           "vietnameseName": "Bánh Mì",
           "price": "$14",
-          "imageUrl": "saffron-wok-pork-kebab.jpg"
+          "imageUrl": "pork.jpg"
         },
         {
           "name": "Special Beef Kebab with Season Grill Bánh Mì",
           "vietnameseName": "Bánh Mì",
           "price": "$16",
-          "imageUrl": "saffron-wok-beef-kebab.jpg"
+          "imageUrl": "beef.jpg"
         }
       ]
     },
@@ -48,18 +48,18 @@
         {
           "name": "Saigon Flame Squid Kebob",
           "price": "$20",
-          "imageUrl": "squid-kebab.jpg"
+          "imageUrl": "squid.jpg"
 
         },
         {
           "name": "Grill Bread + BBQ House Special Half Chicken",
           "price": "$17",
-          "imageUrl": "half-chick-kebab.jpg"
+          "imageUrl": "half.jpg"
         },
         {
           "name": "2 Grill Bread + BBQ House Special Full Chicken",
           "price": "$30",
-          "imageUrl": "whole-chick-kebab.jpg"
+          "imageUrl": "whole.jpg"
         }
       ]
     },
