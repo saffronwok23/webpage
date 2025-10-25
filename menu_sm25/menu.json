@@ -9,14 +9,9 @@
           "imageUrl": "corn.jpg"
         },
         {
-          "name": "Grilled Jumbo Chicke Paws",
-          "price": "$7",
-          "imageUrl": "paws.jpg"
-        },
-        {
-          "name": "Grilled Cheesy Potato",
-          "price": "$6",
-          "imageUrl": "potato.jpg"
+          "name": "House Special Jumbo Wings Sate",
+          "price": "$13/7pcs",
+          "imageUrl": "wings.jpg"
         }
       ]
     },
@@ -24,18 +19,21 @@
       "name": "Plates",
       "items": [
         {
-          "name": "House Special Jumbo Wings Sate",
-          "price": "$13/7ea",
-          "imageUrl": "wings.jpg"
+          "name": "Pho-rsian Chicken Skewer",
+          "price": "$13"
         },
         {
-          "name": "Special Pork Kebab with Season Grill Bánh Mì",
+          "name": "Saigon Kobideh",
+          "price": "$14"
+        },
+        {
+          "name": "Special Pork Kebab",
           "vietnameseName": "Bánh Mì",
           "price": "$14",
           "imageUrl": "pork.jpg"
         },
         {
-          "name": "Special Beef Kebab with Season Grill Bánh Mì",
+          "name": "Special Beef Kebab",
           "vietnameseName": "Bánh Mì",
           "price": "$16",
           "imageUrl": "beef.jpg"
@@ -46,10 +44,9 @@
       "name": "For 2 or More",
       "items": [
         {
-          "name": "Saigon Flame Squid Kebob",
+          "name": "Saigon Flame Squid Kebab",
           "price": "$20",
           "imageUrl": "squid.jpg"
-
         },
         {
           "name": "Grill Bread + BBQ House Special Half Chicken",
