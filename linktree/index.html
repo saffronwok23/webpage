@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaffronWok - Connect With Us</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #121212;
+            color: #E0E0E0;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden; 
+        }
+        h1, .font-cinzel {
+            font-family: 'Cinzel', serif;
+        }
+        #fire-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.6;
+        }
+        .link-card {
+            background: rgba(26, 26, 26, 0.8);
+            border: 1px solid rgba(255, 165, 0, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .link-card:hover {
+            transform: scale(1.03);
+            border-color: #FFA500;
+            box-shadow: 0 0 15px rgba(255, 165, 0, 0.4);
+            background: rgba(30, 30, 30, 0.95);
+            color: #FFA500;
+        }
+        .profile-img {
+            border: 3px solid #FFA500;
+            box-shadow: 0 0 20px rgba(255, 165, 0, 0.5);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <canvas id="fire-canvas"></canvas>
+
+    <div class="max-w-md w-full text-center space-y-8 z-10">
+        <div class="space-y-4">
+            <img src="../Logo.png" alt="Saffron Wok Logo" class="profile-img w-24 h-24 rounded-full mx-auto object-cover bg-black">
+            <h1 class="text-3xl font-bold font-cinzel tracking-wider text-white">Saffron Wok</h1>
+            <p class="text-gray-400 font-light">Persian-Vietnamese Fusion Catering</p>
+        </div>
+
+        <div class="space-y-4">
+            <a href="../index.html" class="link-card text-white">
+                🌐 Visit Full Website
+            </a>
+
+            <a href="tel:+14708933450" class="link-card text-white">
+                📞 Call Us Now
+            </a>
+
+            <a href="https://www.instagram.com/saffronwok2023/" target="_blank" class="link-card text-[#E4405F]">
+                📸 Follow on Instagram
+            </a>
+
+            <a href="https://www.facebook.com/profile.php?id=61572415435316" target="_blank" class="link-card text-[#1877F2]">
+                📘 Like us on Facebook
+            </a>
+        </div>
+
+        <div class="pt-8">
+            <p class="text-xs text-gray-500 uppercase tracking-widest font-cinzel">Duluth, Georgia</p>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('fire-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + 50;
+                this.size = Math.random() * 3 + 1;
+                this.speedY = Math.random() * 1.5 + 0.5;
+                this.opacity = 1;
+            }
+            update() {
+                this.y -= this.speedY;
+                if (this.opacity > 0.01) this.opacity -= 0.005;
+            }
+            draw() {
+                ctx.fillStyle = `rgba(255, 165, 0, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (particles.length < 60) particles.push(new Particle());
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].opacity <= 0.02) {
+                    particles.splice(i, 1);
+                    i--;
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
