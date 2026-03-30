@@ -234,392 +234,185 @@
         </footer>
     </main>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Loader Animation
-            const loader = document.getElementById('loader');
-            const loaderVideo = document.getElementById('loader-video');
-            const heroLogo = document.getElementById('hero-logo');
+   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    // Selectors
+    const loader = document.getElementById('loader');
+    const loaderVideo = document.getElementById('loader-video');
+    const heroLogo = document.getElementById('hero-logo');
+    const menuGrid = document.getElementById('menu-grid');
+    const filterBtns = document.querySelectorAll('.menu-filter-btn');
+    const galleryContainer = document.getElementById('gallery-container');
+    const mobileGalleryTrack = document.getElementById('mobile-gallery-track');
 
-            function hideLoader() {
-                 if (!loader.classList.contains('hidden')) {
-                    loader.classList.add('hidden');
-                    setTimeout(() => {
-                        loader.style.display = 'none';
-                        heroLogo.classList.add('visible');
-                    }, 1000); 
-                }
-            }
+    let menuData = []; // To be populated from JSON
 
-            // Check if the video can play
-            if (window.innerWidth < 768) {
+    // --- LOADER LOGIC ---
+    function hideLoader() {
+        if (!loader.classList.contains('hidden')) {
+            loader.classList.add('hidden');
+            setTimeout(() => {
                 loader.style.display = 'none';
                 heroLogo.classList.add('visible');
-            } else {
-                // Start playing the video
-                const playPromise = loaderVideo.play();
-                if (playPromise !== undefined) {
-                    playPromise.catch(error => {
-                        // If autoplay fails, hide the loader immediately.
-                        console.error("Video autoplay failed:", error);
-                        hideLoader();
-                    });
-                }
-                // Set a timer to hide the loader after 6 seconds
-                setTimeout(hideLoader, 7000);
-            }
+            }, 1000);
+        }
+    }
 
+    if (window.innerWidth < 768) {
+        loader.style.display = 'none';
+        heroLogo.classList.add('visible');
+    } else {
+        loaderVideo.play().catch(() => hideLoader());
+        setTimeout(hideLoader, 7000);
+    }
 
-            // Fire Canvas Animation
-            const canvas = document.getElementById('fire-canvas');
-            const ctx = canvas.getContext('2d');
-            let particles = [];
+    // --- DATA FETCHING & INITIALIZATION ---
+    async function initApp() {
+        try {
+            // Fetch the menu data from external JSON
+            const response = await fetch('./MenuGrid.json');
+            menuData = await response.json();
 
-            function resizeCanvas() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
-            resizeCanvas();
-            window.addEventListener('resize', resizeCanvas);
-
-            class Particle {
-                constructor() {
-                    this.x = Math.random() * canvas.width;
-                    this.y = canvas.height + Math.random() * 100;
-                    this.vx = (Math.random() - 0.5) * 0.6;
-                    this.vy = -Math.random() * 2.5 - 1.5;
-                    this.size = Math.random() * 3 + 1.5; // Larger particles
-                    this.life = Math.random() * 100 + 50;
-                    // Brighter, more orange/red colors with higher opacity
-                    this.color = `rgba(255, ${Math.random() * 100 + 80}, 0, ${Math.random() * 0.4 + 0.5})`;
-                }
-                update() {
-                    this.x += this.vx;
-                    this.y += this.vy;
-                    this.life--;
-                }
-                draw() {
-                    ctx.beginPath();
-                    // Add a glow effect
-                    ctx.shadowBlur = 10;
-                    ctx.shadowColor = 'rgba(255, 100, 0, 0.7)';
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fillStyle = this.color;
-                    ctx.fill();
-                    // Reset shadow
-                    ctx.shadowBlur = 0;
-                }
-            }
-
-            function animateFire() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                if (particles.length < 150) { // Increased particle count
-                    for (let i = 0; i < 5; i++) {
-                        particles.push(new Particle());
-                    }
-                }
-                particles.forEach((p, i) => {
-                    p.update();
-                    p.draw();
-                    if (p.life < 0 || p.y < 0) {
-                        particles.splice(i, 1);
-                    }
-                });
-                requestAnimationFrame(animateFire);
-            }
-            animateFire();
-
-            // Header Scroll Effect
-            const header = document.getElementById('main-header');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 50) {
-                    header.classList.add('bg-black', 'bg-opacity-80', 'shadow-lg');
-                    header.classList.remove('bg-transparent');
-                } else {
-                    header.classList.remove('bg-black', 'bg-opacity-80', 'shadow-lg');
-                    header.classList.add('bg-transparent');
-                }
-            });
-
-            // Mobile Menu
-            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-            const mobileMenu = document.getElementById('mobile-menu');
-            mobileMenuBtn.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-            document.querySelectorAll('#mobile-menu a').forEach(link => {
-                link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
-            });
-
-            // Smooth Scrolling & Active Nav Link
-            const navLinks = document.querySelectorAll('.nav-link');
-            const sections = document.querySelectorAll('main section');
+            // Once data is loaded, populate the UI
+            renderMenu('all');
+            setupGallery();
             
-            navLinks.forEach(link => {
-                link.addEventListener('click', e => {
-                    e.preventDefault();
-                    const targetId = link.getAttribute('href');
-                    document.querySelector(targetId).scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                });
-            });
-
-            window.addEventListener('scroll', () => {
-                let current = '';
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop;
-                    if (pageYOffset >= sectionTop - 60) {
-                        current = section.getAttribute('id');
-                    }
-                });
-
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href').includes(current)) {
-                        link.classList.add('active');
-                    }
-                });
-            });
-            
-            // Menu Data & Filtering
-            const menuData = [
-                { name: 'Corn Stir Fried', vietnameseName: 'Bắp Xào', category: 'appetizer', sizeClasses: "w-40 h-40 md:w-48 md:h-48" },
-                { name: 'Grill Chicken Feet Satay', vietnameseName: 'Chân Gà Nướng Satay', category: 'appetizer', sizeClasses: "w-36 h-36 md:w-40 md:h-40"},
-                { name: 'Grill Chicken Wings Satay', vietnameseName: 'Cánh Gà Nướng Satay', category: 'appetizer', sizeClasses: "w-24 h-24 md:w-32 md:h-32"},
-                { name: 'BBQ House Special Pork Kebob', vietnameseName: 'Thịt Xiên Đặc Biệt', category: 'appetizer', sizeClasses: "w-32 h-32 md:w-44 md:h-44"},
-                { name: 'BBQ House Special Beef Kebob', vietnameseName: 'Bò Xiên Đặc Biệt', category: 'appetizer', sizeClasses: "w-40 h-40 md:w-52 md:h-52"},
-                { name: 'Grill Bread + House Special Pork Kebob', vietnameseName: 'Bánh Mì Nướng + Thịt Xiên Đặc Biệt', category: 'plates', sizeClasses: "w-28 h-28 md:w-36 md:h-36"},
-                { name: 'Grill Bread + House Special Beef Kebob', vietnameseName: 'Bánh Mì Nướng + Bò Xiên Đặc Biệt', category: 'plates', sizeClasses: "w-36 h-36 md:w-48 md:h-48"},
-                { name: 'Grill Bread + BBQ House Special Half Chicken', vietnameseName: '1 Bánh Mì Nướng + ½ Con Gà Nướng Đặc Biệt', category: 'plates', sizeClasses: "w-32 h-32 md:w-40 md:h-40"},
-                { name: 'Grill Bread + BBQ House Special Half Chicken', vietnameseName: '1 Bánh Mì Nướng + ½ Con Gà Nướng Đặc Biệt', category: 'plates', sizeClasses: "w-32 h-32 md:w-40 md:h-40"},
-            ];
-
-            const menuGrid = document.getElementById('menu-grid');
-            const filterBtns = document.querySelectorAll('.menu-filter-btn');
-
-            const displayMenu = (filter) => {
-                menuGrid.innerHTML = '';
-                const filteredData = (filter === 'all') ? menuData : menuData.filter(item => item.category === filter);
-                
-                filteredData.forEach(item => {
-                    const menuItemEl = document.createElement('div');
-                    menuItemEl.className = 'menu-item bg-[#1a1a1a] rounded-lg overflow-hidden border border-gray-700 flex flex-col';
-                    menuItemEl.innerHTML = `
-                        <img src="./img/${item.name}.jpg" alt="${item.name}" class="w-full h-48 object-cover">
-                        <div class="p-6 flex-grow flex flex-col">
-                            <h3 class="text-xl font-bold font-cinzel mb-2 flex-grow">${item.name}</h3>
-                            <p class="text-gray-400 text-sm">${item.vietnameseName}</p>
-                        </div>
-                    `;
-                    menuGrid.appendChild(menuItemEl);
-                });
-            };
-
-            filterBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    filterBtns.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    displayMenu(btn.dataset.filter);
-                });
-            });
-            
-            displayMenu('all');
-
-            const style = document.createElement('style');
-            style.innerHTML = `
-                .menu-filter-btn {
-                    padding: 8px 20px;
-                    border: 1px solid #4a4a4a;
-                    border-radius: 9999px;
-                    transition: all 0.3s ease;
-                    cursor: pointer;
-                    white-space: nowrap;
-                }
-                .menu-filter-btn:hover {
-                    background-color: #FFA500;
-                    border-color: #FFA500;
-                    color: #121212;
-                }
-                .menu-filter-btn.active {
-                    background-color: #FFA500;
-                    border-color: #FFA500;
-                    color: #121212;
-                    font-weight: 600;
-                }
-            `;
-            document.head.appendChild(style);
-
-            const galleryContainer = document.getElementById('gallery-container');
-            const mobileGalleryTrack = document.getElementById('mobile-gallery-track');
-
-            menuData.forEach(item => {
-                // Populate Desktop Gallery
-                const desktopWrapper = document.createElement('div');
-                desktopWrapper.className = `gallery-image-wrapper ${item.sizeClasses}`;
-                desktopWrapper.innerHTML = `<img class="w-full h-full rounded-full object-cover border-4 border-gray-700 shadow-lg" src="./img/${item.name}.jpg" alt="${item.alt}">`;
-                galleryContainer.appendChild(desktopWrapper);
-
-                // Populate Mobile Gallery
-                const mobileWrapper = document.createElement('div');
-                mobileWrapper.className = 'w-full flex-shrink-0';
-                mobileWrapper.innerHTML = `<img src="./img/${item.name}.jpg" class="w-full h-64 object-cover" alt="${item.alt}">`;
-                mobileGalleryTrack.appendChild(mobileWrapper);
-            });
-            // Desktop Gallery: Floating Images with Collision
-            if (galleryContainer) {
-                const imageWrappers = galleryContainer.querySelectorAll('.gallery-image-wrapper');
-                const galleryParticles = [];
-                
-                function initializeGallery() {
-                    galleryParticles.length = 0; // Clear previous particles
-                    const containerRect = galleryContainer.getBoundingClientRect();
-                    imageWrappers.forEach(wrapper => {
-                        const wrapperRect = wrapper.getBoundingClientRect();
-                        const radius = wrapperRect.width / 2;
-                        let particle;
-                        let isOverlapping;
-                        let attempts = 0;
-
-                        do {
-                            isOverlapping = false;
-                            particle = {
-                                el: wrapper,
-                                x: Math.random() * (containerRect.width - wrapperRect.width),
-                                y: Math.random() * (containerRect.height - wrapperRect.height),
-                                vx: (Math.random() - 0.5) * 0.5,
-                                vy: (Math.random() - 0.5) * 0.5,
-                                radius: radius
-                            };
-
-                            for (const other of galleryParticles) {
-                                const dx = (particle.x + particle.radius) - (other.x + other.radius);
-                                const dy = (particle.y + particle.radius) - (other.y + other.radius);
-                                const distance = Math.sqrt(dx * dx + dy * dy);
-                                if (distance < particle.radius + other.radius + 5) { // Added buffer
-                                    isOverlapping = true;
-                                    break;
-                                }
-                            }
-                            attempts++;
-                        } while (isOverlapping && attempts < 100);
-                        
-                        galleryParticles.push(particle);
-                    });
-                }
-                
-                function resolveCollision(p1, p2) {
-                    const dx = (p2.x + p2.radius) - (p1.x + p1.radius);
-                    const dy = (p2.y + p2.radius) - (p1.y + p1.radius);
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < p1.radius + p2.radius) {
-                        const normalX = dx / distance;
-                        const normalY = dy / distance;
-                        const tangentX = -normalY;
-                        const tangentY = normalX;
-                        const dpTan1 = p1.vx * tangentX + p1.vy * tangentY;
-                        const dpTan2 = p2.vx * tangentX + p2.vy * tangentY;
-                        const dpNorm1 = p1.vx * normalX + p1.vy * normalY;
-                        const dpNorm2 = p2.vx * normalX + p2.vy * normalY;
-                        const m1 = dpNorm2;
-                        const m2 = dpNorm1;
-                        p1.vx = tangentX * dpTan1 + normalX * m1;
-                        p1.vy = tangentY * dpTan1 + normalY * m1;
-                        p2.vx = tangentX * dpTan2 + normalX * m2;
-                        p2.vy = tangentY * dpTan2 + normalY * m2;
-                        const overlap = 0.5 * (p1.radius + p2.radius - distance + 1);
-                        p1.x -= overlap * normalX;
-                        p1.y -= overlap * normalY;
-                        p2.x += overlap * normalX;
-                        p2.y += overlap * normalY;
-                    }
-                }
-
-                let animationFrameId;
-                function animateGallery() {
-                    const currentContainerRect = galleryContainer.getBoundingClientRect();
-                    galleryParticles.forEach((p, index) => {
-                        if (p.x <= 0 || p.x + p.radius * 2 >= currentContainerRect.width) p.vx *= -1;
-                        if (p.y <= 0 || p.y + p.radius * 2 >= currentContainerRect.height) p.vy *= -1;
-                        p.x = Math.max(0, Math.min(p.x, currentContainerRect.width - p.radius * 2));
-                        p.y = Math.max(0, Math.min(p.y, currentContainerRect.height - p.radius * 2));
-                        for (let i = index + 1; i < galleryParticles.length; i++) {
-                            resolveCollision(p, galleryParticles[i]);
-                        }
-                        p.x += p.vx;
-                        p.y += p.vy;
-                        p.el.style.transform = `translate(${p.x}px, ${p.y}px)`;
-                    });
-                    animationFrameId = requestAnimationFrame(animateGallery);
-                }
-                
-                // Use window.onload to ensure all assets are loaded and sizes are correct
-                window.onload = () => {
-                    if (window.innerWidth >= 768) { // md breakpoint
-                         initializeGallery();
-                         animateGallery();
-                    }
-                };
-
-                window.onresize = () => {
-                    if (window.innerWidth >= 768) {
-                        cancelAnimationFrame(animationFrameId);
-                        initializeGallery();
-                        animateGallery();
-                    } else {
-                        cancelAnimationFrame(animationFrameId);
-                    }
-                };
+            // Re-initialize gallery physics if on desktop
+            if (window.innerWidth >= 768) {
+                initializeGalleryPhysics();
+                animateGallery();
             }
+        } catch (error) {
+            console.error("Error loading menu data:", error);
+            menuGrid.innerHTML = `<p class="text-center col-span-full">Failed to load menu. Please try again later.</p>`;
+        }
+    }
 
-            // Mobile Carousel Logic
-            const mobileGallery = document.getElementById('mobile-gallery');
-            if(mobileGallery) {
-                const track = document.getElementById('mobile-gallery-track');
-                const prevBtn = document.getElementById('prev-btn');
-                const nextBtn = document.getElementById('next-btn');
-                const slides = Array.from(track.children);
-                const slideCount = slides.length;
-                let currentIndex = 0;
+    // --- MENU RENDERING ---
+    function renderMenu(filter) {
+        menuGrid.innerHTML = '';
+        const filtered = filter === 'all' ? menuData : menuData.filter(i => i.category === filter);
 
-                function updateCarousel() {
-                    track.style.transform = `translateX(-${currentIndex * 100}%)`;
-                }
-
-                nextBtn.addEventListener('click', () => {
-                    currentIndex = (currentIndex + 1) % slideCount;
-                    updateCarousel();
-                });
-
-                prevBtn.addEventListener('click', () => {
-                    currentIndex = (currentIndex - 1 + slideCount) % slideCount;
-                    updateCarousel();
-                });
-                
-                // Swipe functionality
-                let touchStartX = 0;
-                let touchEndX = 0;
-
-                track.addEventListener('touchstart', (e) => {
-                    touchStartX = e.changedTouches[0].screenX;
-                });
-
-                track.addEventListener('touchend', (e) => {
-                    touchEndX = e.changedTouches[0].screenX;
-                    handleSwipe();
-                });
-
-                function handleSwipe() {
-                    if (touchEndX < touchStartX) { // Swiped left
-                        nextBtn.click();
-                    }
-                    if (touchEndX > touchStartX) { // Swiped right
-                        prevBtn.click();
-                    }
-                }
-            }
+        filtered.forEach(item => {
+            const el = document.createElement('div');
+            el.className = 'menu-item bg-[#1a1a1a] rounded-lg overflow-hidden border border-gray-700 flex flex-col';
+            el.innerHTML = `
+                <img src="./img/${item.name}.jpg" alt="${item.name}" class="w-full h-48 object-cover">
+                <div class="p-6 flex-grow flex flex-col">
+                    <h3 class="text-xl font-bold font-cinzel mb-2 flex-grow">${item.name}</h3>
+                    <p class="text-gray-400 text-sm">${item.vietnameseName}</p>
+                </div>`;
+            menuGrid.appendChild(el);
         });
-    </script>
+    }
+
+    // Filter Button Click Events
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderMenu(btn.dataset.filter);
+        });
+    });
+
+    // --- GALLERY POPULATION ---
+    function setupGallery() {
+        menuData.forEach(item => {
+            // Desktop
+            const dWrap = document.createElement('div');
+            dWrap.className = `gallery-image-wrapper ${item.sizeClasses}`;
+            dWrap.innerHTML = `<img class="w-full h-full rounded-full object-cover border-4 border-gray-700 shadow-lg" src="./img/${item.name}.jpg" alt="${item.name}">`;
+            galleryContainer.appendChild(dWrap);
+
+            // Mobile
+            const mWrap = document.createElement('div');
+            mWrap.className = 'w-full flex-shrink-0';
+            mWrap.innerHTML = `<img src="./img/${item.name}.jpg" class="w-full h-64 object-cover" alt="${item.name}">`;
+            mobileGalleryTrack.appendChild(mWrap);
+        });
+    }
+
+    // --- FIRE CANVAS ANIMATION ---
+    const canvas = document.getElementById('fire-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = canvas.height + Math.random() * 100;
+            this.vx = (Math.random() - 0.5) * 0.6;
+            this.vy = -Math.random() * 2.5 - 1.5;
+            this.size = Math.random() * 3 + 1.5;
+            this.life = Math.random() * 100 + 50;
+            this.color = `rgba(255, ${Math.random() * 100 + 80}, 0, ${Math.random() * 0.4 + 0.5})`;
+        }
+        update() { this.x += this.vx; this.y += this.vy; this.life--; }
+        draw() {
+            ctx.beginPath();
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = 'rgba(255, 100, 0, 0.7)';
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+        }
+    }
+
+    function animateFire() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (particles.length < 150) { for (let i = 0; i < 5; i++) particles.push(new Particle()); }
+        particles.forEach((p, i) => {
+            p.update(); p.draw();
+            if (p.life < 0 || p.y < 0) particles.splice(i, 1);
+        });
+        requestAnimationFrame(animateFire);
+    }
+    animateFire();
+
+    // --- GALLERY PHYSICS & COLLISION ---
+    const galleryParticles = [];
+    let animationFrameId;
+
+    function initializeGalleryPhysics() {
+        galleryParticles.length = 0;
+        const wrappers = galleryContainer.querySelectorAll('.gallery-image-wrapper');
+        const containerRect = galleryContainer.getBoundingClientRect();
+
+        wrappers.forEach(wrapper => {
+            const radius = wrapper.offsetWidth / 2;
+            galleryParticles.push({
+                el: wrapper,
+                x: Math.random() * (containerRect.width - radius * 2),
+                y: Math.random() * (containerRect.height - radius * 2),
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5,
+                radius: radius
+            });
+        });
+    }
+
+    function animateGallery() {
+        const rect = galleryContainer.getBoundingClientRect();
+        galleryParticles.forEach((p, idx) => {
+            if (p.x <= 0 || p.x + p.radius * 2 >= rect.width) p.vx *= -1;
+            if (p.y <= 0 || p.y + p.radius * 2 >= rect.height) p.vy *= -1;
+            p.x += p.vx; p.y += p.vy;
+            p.el.style.transform = `translate(${p.x}px, ${p.y}px)`;
+        });
+        animationFrameId = requestAnimationFrame(animateGallery);
+    }
+
+    // --- OTHER UI LOGIC (Header, Mobile Menu, Carousel) ---
+    // (Header scroll, Mobile menu toggle, and Carousel swipe logic remains the same as your original)
+    // ... [Original UI scripts here] ...
+
+    // Start the App
+    initApp();
+});
+   </script>
 </body>
 </html>

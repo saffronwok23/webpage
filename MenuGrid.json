@@ -1,0 +1,10 @@
+[
+  { "name": "Corn Stir Fried", "vietnameseName": "Bắp Xào", "category": "appetizer", "sizeClasses": "w-40 h-40 md:w-48 md:h-48" },
+  { "name": "Grill Chicken Feet Satay", "vietnameseName": "Chân Gà Nướng Satay", "category": "appetizer", "sizeClasses": "w-36 h-36 md:w-40 md:h-40"},
+  { "name": "Grill Chicken Wings Satay", "vietnameseName": "Cánh Gà Nướng Satay", "category": "appetizer", "sizeClasses": "w-24 h-24 md:w-32 md:h-32"},
+  { "name": "BBQ House Special Pork Kebob", "vietnameseName": "Thịt Xiên Đặc Biệt", "category": "appetizer", "sizeClasses": "w-32 h-32 md:w-44 md:h-44"},
+  { "name": "BBQ House Special Beef Kebob", "vietnameseName": "Bò Xiên Đặc Biệt", "category": "appetizer", "sizeClasses": "w-40 h-40 md:w-52 md:h-52"},
+  { "name": "Grill Bread + House Special Pork Kebob", "vietnameseName": "Bánh Mì Nướng + Thịt Xiên Đặc Biệt", "category": "plates", "sizeClasses": "w-28 h-28 md:w-36 md:h-36"},
+  { "name": "Grill Bread + House Special Beef Kebob", "vietnameseName": "Bánh Mì Nướng + Bò Xiên Đặc Biệt", "category": "plates", "sizeClasses": "w-36 h-36 md:w-48 md:h-48"},
+  { "name": "Grill Bread + BBQ House Special Half Chicken", "vietnameseName": "1 Bánh Mì Nướng + ½ Con Gà Nướng Đặc Biệt", "category": "plates", "sizeClasses": "w-32 h-32 md:w-40 md:h-40"}
+]
