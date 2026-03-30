@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaffronWok - Persian-Vietnamese Fusion Catering</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #121212;
+            color: #E0E0E0;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+        h1, h2, h3, h4, .font-cinzel {
+            font-family: 'Cinzel', serif;
+        }
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #FFA500;
+            transition: width 0.3s ease;
+        }
+        .nav-link.active, .nav-link:hover {
+            color: #FFA500;
+        }
+        .nav-link.active::after, .nav-link:hover::after {
+            width: 100%;
+        }
+        .menu-item {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+        }
+        .btn-primary {
+            background-color: #FFA500;
+            color: #121212;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        .btn-primary:hover {
+            background-color: #E0E0E0;
+            color: #121212;
+            transform: scale(1.05);
+        }
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #121212;
+            transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+        #loader.hidden {
+            transform: translateY(-100%);
+        }
+        .loader-vid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        #fire-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.7;
+        }
+        .gallery-image-wrapper {
+            position: absolute;
+            transition: transform 0.3s ease;
+        }
+        .gallery-image-wrapper:hover {
+            transform: scale(1.05) !important;
+            z-index: 10;
+        }
+        .hero-logo {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .hero-logo.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div id="loader">
+        <video id="loader-video" src="./intro.mp4" muted playsinline class="loader-vid hidden md:block"></video>
+        <video id="loader-video-mobile" src="./introM.mp4" muted playsinline class="loader-vid block md:hidden"></video>
+    </div>
+
+    <header id="main-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-transparent py-4">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <a href="#" class="text-3xl font-bold font-cinzel">SaffronWok</a>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#story" class="nav-link">Our Story</a>
+                <a href="#menu" class="nav-link">Menu</a>
+                <a href="#gallery" class="nav-link">Gallery</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </nav>
+            <a href="#order" class="hidden md:inline-block px-6 py-2 rounded-md btn-primary">Catering</a>
+            <button id="mobile-menu-btn" class="md:hidden text-2xl">☰</button>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-black bg-opacity-90 mt-4">
+            <a href="#story" class="block text-center py-3 px-6 nav-link">Our Story</a>
+            <a href="#menu" class="block text-center py-3 px-6 nav-link">Menu</a>
+            <a href="#gallery" class="block text-center py-3 px-6 nav-link">Gallery</a>
+            <a href="#contact" class="block text-center py-3 px-6 nav-link">Contact</a>
+            <a href="#order" class="block text-center py-4 px-6 btn-primary mx-4 my-4 rounded-md">Catering</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="hero" class="relative h-screen flex items-center justify-center text-center overflow-hidden">
+            <canvas id="fire-canvas"></canvas>
+            <div class="absolute inset-0 bg-black opacity-60"></div>
+            <div class="relative z-10 px-4">
+                <img id="hero-logo" src="./Logo.png" alt="Saffron Wok Logo" class="hero-logo max-w-sm sm:max-w-md md:max-w-lg mx-auto">
+            </div>
+        </section>
+
+        <section id="menu" class="py-20 md:py-32">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl md:text-5xl font-cinzel text-center mb-12">Our Menu</h2>
+                <div id="menu-filters" class="flex justify-center flex-wrap gap-2 md:space-x-4 mb-12">
+                    <button class="menu-filter-btn active" data-filter="all">All</button>
+                    <button class="menu-filter-btn" data-filter="appetizer">Appetizers</button>
+                    <button class="menu-filter-btn" data-filter="plates">Plates</button>
+                </div>
+                <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+            </div>
+        </section>
+        
+        <section id="story" class="py-20 md:py-32 bg-[#1a1a1a]">
+            <div class="container mx-auto px-6">
+                <div class="max-w-4xl mx-auto text-center">
+                    <h2 class="text-4xl md:text-5xl font-cinzel mb-6">A Fusion of Flavor & Fire</h2>
+                    <p class="text-lg text-gray-400 leading-relaxed">
+                        Established in 2023, Saffron Wok was born from a passion for flavor and a mastery of fire. We blend the aromatic elegance of traditional spices with the bold, savory character of Asian wok cooking and grilling.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="gallery" class="py-20 md:py-32 bg-[#1a1a1a]">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl md:text-5xl font-cinzel mb-12">A Visual Feast</h2>
+            </div>
+            <div id="gallery-container" class="relative w-full h-[70vh] max-h-[600px] border-y border-gray-800 overflow-hidden bg-black/20 hidden md:block"></div>
+            <div id="mobile-gallery" class="md:hidden relative w-full overflow-hidden rounded-lg border border-gray-800">
+                <div id="mobile-gallery-track" class="flex transition-transform duration-500 ease-in-out"></div>
+                <button id="prev-btn" class="absolute top-1/2 left-2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full">&lt;</button>
+                <button id="next-btn" class="absolute top-1/2 right-2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full">&gt;</button>
+            </div>
+        </section>
+
+        <section id="order" class="py-20 md:py-32 text-center">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl md:text-5xl font-cinzel mb-6">Expert Catering For Your Next Event</h2>
+                <a href="tel:404-740-9201" class="inline-block px-12 py-4 rounded-md btn-primary text-xl">Call Catering: (404) 740-9201</a>
+            </div>
+        </section>
+
+        <footer id="contact" class="py-16 bg-black">
+            <div class="container mx-auto px-6 text-center text-gray-400">
+                <p class="text-sm">&copy; 2025 Saffron Wok. All Rights Reserved.</p>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // LOADER LOGIC FOR RESPONSIVE VIDEO
+            const loader = document.getElementById('loader');
+            const heroLogo = document.getElementById('hero-logo');
+            const isMobile = window.innerWidth < 768;
+            const activeVideo = isMobile 
+                ? document.getElementById('loader-video-mobile') 
+                : document.getElementById('loader-video');
+
+            function hideLoader() {
+                if (!loader.classList.contains('hidden')) {
+                    loader.classList.add('hidden');
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                        heroLogo.classList.add('visible');
+                    }, 1000); 
+                }
+            }
+
+            if (activeVideo) {
+                activeVideo.play().then(() => {
+                    activeVideo.onended = hideLoader;
+                    setTimeout(hideLoader, 7000); // Fallback
+                }).catch(() => hideLoader());
+            } else {
+                hideLoader();
+            }
+
+            // FIRE CANVAS
+            const canvas = document.getElementById('fire-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = canvas.height + Math.random() * 100;
+                    this.vx = (Math.random() - 0.5) * 0.6;
+                    this.vy = -Math.random() * 2.5 - 1.5;
+                    this.size = Math.random() * 3 + 1.5;
+                    this.life = Math.random() * 100 + 50;
+                    this.color = `rgba(255, ${Math.random() * 100 + 80}, 0, ${Math.random() * 0.4 + 0.5})`;
+                }
+                update() { this.x += this.vx; this.y += this.vy; this.life--; }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.fill();
+                }
+            }
+
+            function animateFire() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                if (particles.length < 150) {
+                    for (let i = 0; i < 5; i++) particles.push(new Particle());
+                }
+                particles.forEach((p, i) => {
+                    p.update(); p.draw();
+                    if (p.life < 0 || p.y < 0) particles.splice(i, 1);
+                });
+                requestAnimationFrame(animateFire);
+            }
+            animateFire();
+
+            // HEADER SCROLL
+            const header = document.getElementById('main-header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('bg-black', 'bg-opacity-80');
+                } else {
+                    header.classList.remove('bg-black', 'bg-opacity-80');
+                }
+            });
+
+            // MOBILE MENU
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+
+            // MENU DATA
+            const menuData = [
+                { name: 'Corn Stir Fried', vietnameseName: 'Bắp Xào', category: 'appetizer' },
+                { name: 'Grill Chicken Feet Satay', vietnameseName: 'Chân Gà Nướng Satay', category: 'appetizer' },
+                { name: 'BBQ House Special Pork Kebob', vietnameseName: 'Thịt Xiên Đặc Biệt', category: 'appetizer' },
+                { name: 'Grill Bread + House Special Beef Kebob', vietnameseName: 'Bánh Mì Nướng + Bò Xiên Đặc Biệt', category: 'plates' }
+            ];
+
+            const menuGrid = document.getElementById('menu-grid');
+            const displayMenu = (filter) => {
+                menuGrid.innerHTML = '';
+                const filtered = filter === 'all' ? menuData : menuData.filter(i => i.category === filter);
+                filtered.forEach(item => {
+                    const el = document.createElement('div');
+                    el.className = 'menu-item bg-[#1a1a1a] rounded-lg overflow-hidden border border-gray-700 p-6';
+                    el.innerHTML = `<h3 class="text-xl font-bold font-cinzel">${item.name}</h3><p class="text-gray-400">${item.vietnameseName}</p>`;
+                    menuGrid.appendChild(el);
+                });
+            };
+            displayMenu('all');
+
+            document.querySelectorAll('.menu-filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.menu-filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    displayMenu(btn.dataset.filter);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
