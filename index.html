@@ -426,7 +426,7 @@
             // Failsafe: Trigger completion after 8 seconds if video hangs
             setTimeout(() => { 
                 if(!loader.classList.contains('hidden')) video.dispatchEvent(new Event('ended')); 
-            }, 8000);
+            }, 7800);
 
             // --- HEADER SCROLL LOGIC ---
             window.addEventListener('scroll', () => {
