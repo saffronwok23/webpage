@@ -425,11 +425,11 @@
                     // Applying discrete animation with staggered delays
                     card.className = `menu-card bg-zinc-900 squircle overflow-hidden flex flex-col group opacity-0`;
                     card.style.animation = `fadeInUp 0.6s ease forwards ${idx * 0.1}s`;
-                    
+                    const imgSrcName = item.name.replace(/\s+/g, '');
                     // Implementing robust image fallbacks using Base64 SVGs to prevent broken layouts
                     card.innerHTML = `
                         <div class="relative h-64 overflow-hidden">
-                            <img src="./img/${item.name}.jpg" alt="${item.name}" 
+                            <img src="./img/${imgSrcName}.jpg" alt="${item.name}" 
                                  class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                  onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMyMjIiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZmlsbD0iIzU1NSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+SW1hZ2UgVW5hdmFpbGFibGU8L3RleHQ+PC9zdmc+'">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
